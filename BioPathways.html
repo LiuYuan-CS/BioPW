@@ -17,13 +17,13 @@
     <script src="js/jquery-1.12.4.js"></script>	
     <script src="js/math.min.js"></script>	 
 	  <script src="js/combined.js"></script> 
-    <script src="js/d3sparql.js"></script>
+    <script src="js/biopwvisualization.js"></script>
     <script>
     //execute the search and show the biological pathway
     function exec() {
       var endpoint = d3.select("#endpoint").property("value")
       var sparql = d3.select("#sparql1").property("value")+d3.select("#pathway_id").property("value")+d3.select("#sparql2").property("value")
-      d3sparql.query(endpoint, sparql, render)
+      biopwvisualization.query(endpoint, sparql, render)
     }
     //
     function render(json) {
@@ -34,8 +34,8 @@
         "height": 550,
         "selector": "#result"
       }
-      d3sparql.forcegraph(json, config)
-      d3sparql.showpathwayname()
+      biopwvisualization.forcegraph(json, config)
+      biopwvisualization.showpathwayname()
     }
     //use cache in case the network is not available
     function exec_offline() {
