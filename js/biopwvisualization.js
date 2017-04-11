@@ -1,18 +1,10 @@
-//
-// d3sparql.js - utilities for visualizing SPARQL results with the D3 library
-//
-//   Web site: http://github.com/ktym/d3sparql/
-//   Copyright: 2013-2015 (C) Toshiaki Katayama (ktym@dbcls.jp)
-//   License: BSD license (same as D3.js)
-//   Initial version: 2013-01-28
-//
 
-var d3sparql = {
-  version: "d3sparql.js version 2015-11-19",
+var biopwvisualization = {
+  version: "biopwvisualization.js version 2017-04-11",
   debug: true  // set to true for showing debug information
 }
 
-var d3sparql_started = false;
+var biopwvisualization_started = false;
 
 
 var searcher = new CompoundSearch("https://beta.openphacts.org/2.1", "161aeb7d", "cffc292726627ffc50ece1dccd15aeaf");
@@ -63,55 +55,27 @@ function trim(str)
 	return str;
 }
 
-d3sparql.query = function(endpoint, sparql, callback) {
+biopwvisualization.query = function(endpoint, sparql, callback) {
   var url = endpoint + "?query=" + encodeURIComponent(sparql)
-  if (d3sparql.debug) { console.log(endpoint) }
-  if (d3sparql.debug) { console.log(url) }
+  if (biopwvisualization.debug) { console.log(endpoint) }
+  if (biopwvisualization.debug) { console.log(url) }
   var mime = "application/sparql-results+json"
   d3.xhr(url, mime, function(request) {
-    //alert("aaaa");
     var json = request.responseText
-
-     //alert("bbbbb");
-    if (d3sparql.debug) { console.log(json) }
+    if (biopwvisualization.debug) { console.log(json) }
     callback(JSON.parse(json))
   })
 /*
   d3.json(url, function(error, json) {
-    if (d3sparql.debug) { console.log(error) }
-    if (d3sparql.debug) { console.log(json) }
+    if (biopwvisualization.debug) { console.log(error) }
+    if (biopwvisualization.debug) { console.log(json) }
     callback(json)
   })
 */
 }
 
-/*
-  Convert sparql-results+json object into a JSON graph in the {"nodes": [], "links": []} form.
-  Suitable for d3.layout.force(), d3.layout.sankey() etc.
 
-  Options:
-    config = {
-      "key1":   "node1",       // SPARQL variable name for node1 (optional; default is the 1st variable)
-      "key2":   "node2",       // SPARQL variable name for node2 (optional; default is the 2nd varibale)
-      "label1": "node1label",  // SPARQL variable name for the label of node1 (optional; default is the 3rd variable)
-      "label2": "node2label",  // SPARQL variable name for the label of node2 (optional; default is the 4th variable)
-      "value1": "node1value",  // SPARQL variable name for the value of node1 (optional; default is the 5th variable)
-      "value2": "node2value"   // SPARQL variable name for the value of node2 (optional; default is the 6th variable)
-    }
-
-  Synopsis:
-    d3sparql.query(endpoint, sparql, render)
-
-    function render(json) {
-      var config = { ... }
-      d3sparql.forcegraph(json, config)
-      d3sparql.sankey(json, config)
-    }
-
-  TODO:
-    Should follow the convention in the miserables.json https://gist.github.com/mbostock/4062045 to contain group for nodes and value for edges.
-*/
-d3sparql.graph = function(json, config) {
+biopwvisualization.graph = function(json, config) {
   config = config || {}
 
   var head = json.head.vars
@@ -194,7 +158,7 @@ d3sparql.graph = function(json, config) {
     }
     graph.links.push({"source": check.get(key1), "target": check.get(key2)})
   }
-  if (d3sparql.debug) { console.log(JSON.stringify(graph)) }
+  if (biopwvisualization.debug) { console.log(JSON.stringify(graph)) }
   $("#pathway_description").html(pathway_description);
   $("#pathway_name").html(pathway_name);
   $("#pathway_description").attr("class","alert alert-success");
@@ -213,7 +177,7 @@ d3sparql.graph = function(json, config) {
 }
 
 
-d3sparql.forcegraph = function(json, config) {
+biopwvisualization.forcegraph = function(json, config) {
 //***************************1******************************
   arrowhead_scale = d3.scale.linear()
     .domain([10, 30])
@@ -226,7 +190,7 @@ d3sparql.forcegraph = function(json, config) {
 	
   config = config || {}
 
-  var graph = (json.head && json.results) ? d3sparql.graph(json, config) : json
+  var graph = (json.head && json.results) ? biopwvisualization.graph(json, config) : json
 
   var scale = d3.scale.linear()
     .domain(d3.extent(graph.nodes, function(d) { return parseFloat(d.value) }))
@@ -260,7 +224,7 @@ d3sparql.forcegraph = function(json, config) {
     d3.select("#tip_img").attr('src',id_img)
   }  
 //***************************2***********************
-if(!d3sparql_started)
+if(!biopwvisualization_started)
 {
 	node_tip = d3.tip()
 	  .attr('id', 'node-tip')
@@ -281,7 +245,7 @@ if(!d3sparql_started)
 
       return tip_html;*/
 	  });  	  
-	d3sparql_started = true;
+	biopwvisualization_started = true;
 }  
 //*******************************2************************************  
 var zoom = d3.behavior.zoom()
@@ -290,7 +254,7 @@ var zoom = d3.behavior.zoom()
       svg.attr("transform", 
        "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
    });
-  var svg = d3sparql.select(opts.selector, "forcegraph").append("svg")
+  var svg = biopwvisualization.select(opts.selector, "forcegraph").append("svg")
     .attr("width", opts.width)
     .attr("height", opts.height)
 ///////////////////////////////////////////
@@ -324,7 +288,7 @@ var zoom = d3.behavior.zoom()
         .attr("r",function(d){ return d.r; })
         .attr("fill","black");*/
  ////////////////////////////////////////
-  d3sparql.piechart(graph,svg);	  
+  biopwvisualization.piechart(graph,svg);	  
 ////////////////////////////////////////  		
 		
 //**************************3******************************
@@ -372,8 +336,6 @@ var zoom = d3.behavior.zoom()
       return "url(#" + d.target + ")"; 
     });
 //****************************3******************************************		
-	
-	
   var force = d3.layout.force()
     .charge(opts.charge)
     .linkDistance(opts.distance)
@@ -396,8 +358,6 @@ var zoom = d3.behavior.zoom()
   }
  
   function releasenode(d) {
-    // of course set the node to fixed so the force doesn't include the node in
-    // its auto positioning stuff
     d.fixed = false; 
     force.resume();
   } 
@@ -458,7 +418,6 @@ var zoom = d3.behavior.zoom()
             });
 	
 
-
   force.on("tick", function() {
     link.attr("x1", function(d) { return d.source.x })
         .attr("y1", function(d) { return d.source.y })
@@ -471,7 +430,6 @@ var zoom = d3.behavior.zoom()
   })
   node.call(force.drag)
 
-  // default CSS/SVG
   link.attr({
     "stroke": "#999999",
   })
@@ -522,66 +480,25 @@ function circleColor(d){if(d.type == "http://vocabularies.wikipathways.org/wp#Pr
                         if(d.type == "http://vocabularies.wikipathways.org/wp#GeneProduct") return "#FFBB78";
                         if(d.type == "http://vocabularies.wikipathways.org/wp#Metabolite") return "#9EDAE5";
                        if(d.type == "http://vocabularies.wikipathways.org/wp#Rna") return "#CEF2E0";
-
-
                         }
 
-function handleMouseOver(d, i) {  // Add interactivity
-
-            // Use D3 to select element, change color and size
+function handleMouseOver(d, i) {  
             d3.select(this).attr({
               fill: "orange",
               r: radius * 2
             });
 }
-d3sparql.select = function(selector, type) {
+biopwvisualization.select = function(selector, type) {
   if (selector) {
-    return d3.select(selector).html("").append("div").attr("class", "d3sparql " + type)
+    return d3.select(selector).html("").append("div").attr("class", "biopwvisualization " + type)
   } else {
-    return d3.select("body").append("div").attr("class", "d3sparql " + type)
+    return d3.select("body").append("div").attr("class", "biopwvisualization " + type)
   }
 }
 
-/*
-  Rendering sparql-results+json object into a pie chart
-
-  References:
-    http://bl.ocks.org/mbostock/3887235 Pie chart
-    http://bl.ocks.org/mbostock/3887193 Donut chart
-
-  Options:
-    config = {
-      "label":    "pref",    // SPARQL variable name for slice label (optional; default is the 1st variable)
-      "size":     "area",    // SPARQL variable name for slice value (optional; default is the 2nd variable)
-      "width":    700,       // canvas width (optional)
-      "height":   600,       // canvas height (optional)
-      "margin":   10,        // canvas margin (optional)
-      "hole":     50,        // radius size of a center hole (optional; 0 for pie, r > 0 for doughnut)
-      "selector": "#result"
-    }
-
-  Synopsis:
-    d3sparql.query(endpoint, sparql, render)
-
-    function render(json) {
-      var config = { ... }
-      d3sparql.piechart(json, config)
-    }
-
-  CSS/SVG:
-    <style>
-    .label {
-      font: 10px sans-serif;
-    }
-    .arc path {
-      stroke: #ffffff;
-    }
-    </style>
-*/
-d3sparql.piechart = function(graph,svg_force) {
+biopwvisualization.piechart = function(graph,svg_force) {
   for(var i=0;i<num_property;i++)
 	  status_property[i] = 0;
-
 
   var opts = {
     "label":    "pref",
@@ -611,7 +528,7 @@ d3sparql.piechart = function(graph,svg_force) {
     //.sort(null)
     .value(function(d,i) { return cnt_per_property[i]; })
 
-  var svg = d3sparql.select(opts.selector, "piechart").append("svg")
+  var svg = biopwvisualization.select(opts.selector, "piechart").append("svg")
     .attr("width", opts.width)
     .attr("height", opts.height)
     .append("g")
@@ -704,7 +621,6 @@ d3sparql.piechart = function(graph,svg_force) {
   slice.attr({
     "stroke": "#ffffff",
   })
-  // TODO: not working?
   svg.selectAll("text").attr({
     "stroke": "none",
     "fill": "black",
@@ -712,9 +628,7 @@ d3sparql.piechart = function(graph,svg_force) {
     "font-family": "sans-serif",
   })
 }
-
-/* Helper function only for the d3sparql web site */
-d3sparql.toggle = function() {
+biopwvisualization.toggle = function() {
   var button = d3.select("#button")
   var elem = d3.select("#sparql")
   if (elem.style("display") === "none") {
@@ -726,8 +640,7 @@ d3sparql.toggle = function() {
   }
 }
 
-/* for IFRAME embed */
-d3sparql.frameheight = function(height) {
+biopwvisualization.frameheight = function(height) {
   d3.select(self.frameElement).style("height", height + "px")
 }
 
