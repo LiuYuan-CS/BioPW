@@ -33,4 +33,7 @@ This will open a new chrome browser, you can open the BioPathways.html in the br
 
 ## Acknowledgement
 
-This demonstrtion is supported by
+This work is supported by the National Natural Science
+Foundation of China (61572353), the Natural Science Foundation of Tianjin
+(17JCYBJC15400), and the Open Fund Project of State Key Lab. for Novel
+Software Technology (Nanjing University) (KFKT2015B20).
