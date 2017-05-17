@@ -85,14 +85,16 @@ biopwvisualization.graph = function(json, config) {
 	  cnt_per_property[index_property] = 0;
   
   var opts = {
-    "key1":   config.key1   || head[0] || "key1",
-    "key2":   config.key2   || head[1] || "key2",
-    "label1": config.label1 || head[2] || false,
-    "label2": config.label2 || head[3] || false,
-    "type1" : config.type1  || head[4] || false,
-    "type2" : config.type2  || head[5] || false,
-    "name"  : config.name   || head[6] || false,
-    "description" : config.description || head[7] || false,
+    "name"  : config.name   || head[0] || false,
+    "description" : config.description || head[1] || false,
+    "type1" : config.type1  || head[2] || false,
+    "type2" : config.type2  || head[3] || false,
+    "key1":   config.key1   || head[4] || "key1",
+    "key2":   config.key2   || head[5] || "key2",
+    "label1": config.label1 || head[6] || false,
+    "label2": config.label2 || head[7] || false,
+    
+   
     //"value1": config.value1 || head[8] || false,
     //"value2": config.value2 || head[9] || false,
   }
@@ -175,7 +177,101 @@ biopwvisualization.graph = function(json, config) {
   $("#legend").html(legend_str);
   return graph
 }
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////sankey//////////////////////////////////////////////////
+///////////////////////////20170425 LiuYuan////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
 
+biopwvisualization.sankey = function(json, config) {
+// control the time
+//setTimeout("alert('Sorry, not applicable!'); return;",30000)
+  config = config || {}
+
+  var graph = (json.head && json.results) ? biopwvisualization.graph(json, config) : json
+
+  var opts = {
+    "width":    config.width    || 750,
+    "height":   config.height   || 1200,
+    "margin":   config.margin   || 10,
+    "selector": config.selector || null
+  }
+
+  var nodes = graph.nodes
+  var links = graph.links
+  for (var i = 0; i < links.length; i++) {
+    links[i].value = 2  // TODO: fix to use values on links
+  }
+    var sankey = d3.sankey()
+    .size([opts.width, opts.height])
+    .nodeWidth(15)
+    .nodePadding(10)
+    .nodes(nodes)
+    .links(links)
+    .layout(32);
+  var path = sankey.link()
+  var color = d3.scale.category20()
+  var svg = biopwvisualization.select(opts.selector, "sankey").append("svg")
+    .attr("width", opts.width + opts.margin * 2)
+    .attr("height", opts.height + opts.margin * 2)
+    .append("g")
+    .attr("transform", "translate(" + opts.margin + "," + opts.margin + ")")
+  var link = svg.selectAll(".link")
+    .data(links)
+    .enter()
+    .append("path")
+    .attr("class", "link")
+    .attr("d", path)
+    .attr("stroke-width", function(d) { return Math.max(1, d.dy) })
+    .sort(function(a, b) { return b.dy - a.dy })
+  var node = svg.selectAll(".node")
+    .data(nodes)
+    .enter()
+    .append("g")
+    .attr("class", "node")
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")" })
+    .call(d3.behavior.drag()
+       .origin(function(d) { return d })
+       .on("dragstart", function() { this.parentNode.appendChild(this) })
+       .on("drag", dragmove)
+     )
+  node.append("rect")
+    .attr("width", function(d) { return d.dx })
+    .attr("height", function(d) { return d.dy })
+    .attr("fill", function(d) { return color(d.label) })
+    .attr("opacity", 0.5)
+  node.append("text")
+    .attr("x", -6)
+    .attr("y", function(d) { return d.dy/2 })
+    .attr("dy", ".35em")
+    .attr("text-anchor", "end")
+    .attr("transform", null)
+    .text(function(d) { return d.label })
+    .filter(function(d) { return d.x < opts.width / 2 })
+    .attr("x", 6 + sankey.nodeWidth())
+    .attr("text-anchor", "start")
+
+  // default CSS/SVG
+  link.attr({
+    "fill": "none",
+    "stroke": "grey",
+    "opacity": 0.5,
+  })
+ ////////////////////////////////////////
+  biopwvisualization.piechart(graph,svg);   
+////////////////////////////////////////  
+  function dragmove(d) {
+    d3.select(this).attr("transform", "translate(" + d.x + "," + (d.y = Math.max(0, Math.min(opts.height - d.dy, d3.event.y))) + ")")
+    sankey.relayout()
+    link.attr("d", path)
+
+  }
+
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////end/////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
 
 biopwvisualization.forcegraph = function(json, config) {
 //***************************1******************************
