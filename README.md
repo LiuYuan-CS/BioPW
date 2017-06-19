@@ -36,6 +36,7 @@ This will open a new chrome browser, you can open the BioPathways.html in the br
  - 解决js跨域问题
  - 解决部分pathway 没有sankey问题
  - 更换key
+ - 自然语言查询
 
 ## Acknowledgement
 
