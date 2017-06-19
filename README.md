@@ -5,6 +5,7 @@ BioPW is an interactive visualization tool for biological pathway Linked Data.
 * [Overview](#overview)
 * [Requirements](#requirements)
 * [Setup](#setup)
+* [Demonstration](#demonstration)
 * [Todo](#todo)
 * [Acknowledgement](#acknowledgement)
 
@@ -25,6 +26,8 @@ Firstly, add the extension in google chrome to allow access using CORS. In Windo
 
       chrome.exe --user-data-dir="C:/Chrome dev session" --disable-web-security
 This will open a new chrome browser, you can open the BioPathways.html in the browser window.
+
+## Demonstration
 
 ## Todo：
 
