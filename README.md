@@ -33,7 +33,7 @@ This will open a new chrome browser, you can open the BioPathways.html in the br
 
  - More functions  
  - Integration
- - 自然语言查询
+
 
 ## Acknowledgement
 
