@@ -34,7 +34,6 @@ This will open a new chrome browser, you can open the BioPathways.html in the br
  - More functions  
  - Integration
  - 解决js跨域问题
- - 更换key
  - 自然语言查询
 
 ## Acknowledgement
