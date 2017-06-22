@@ -34,12 +34,7 @@ This will open a new chrome browser, you can open the BioPathways.html in the br
  - More functions  
  - Integration
  - 自然语言查询
-1
-2
-3
-4
-5
-6
+
 ## Acknowledgement
 
 This work is supported by the National Natural Science
