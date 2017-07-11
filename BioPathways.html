@@ -4,22 +4,22 @@
   <head>
   <meta charset="utf-8">
   <title>BioPathways</title>
-    <style>
+  <style>
   #headbar {
     background: #007099; <!--#092234;-->
     padding: 0px;
     margin: 0px;
   }
   </style>
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
-    <script src="js/d3.js"></script>
-    <script src="js/d3-tip.min.js"></script>	
-    <script src="js/jquery-1.12.4.js"></script>	
-    <script src="js/math.min.js"></script>	 
-	  <script src="js/combined.js"></script> 
-    <script src="js/biopwvisualization.js"></script>
-    <script src="js/sankey.js"></script>
-    <script>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+  <script src="js/d3.js"></script>
+  <script src="js/d3-tip.min.js"></script>	
+  <script src="js/jquery-1.12.4.js"></script>	
+  <script src="js/math.min.js"></script>	 
+  <script src="js/combined.js"></script> 
+  <script src="js/biopwvisualization.js"></script>
+  <script src="js/sankey.js"></script>
+  <script>
     //execute the search and show the biological pathway
     function exec_forcegraph() {
       var endpoint = d3.select("#endpoint").property("value")
@@ -67,10 +67,10 @@
     }
     //
      function exec_offline_sankey() {
-      d3.json("cache/wp1011_sankey.json", render_sankey)
+      	d3.json("cache/wp1011_sankey.json", render_sankey)
     }
     </script>
-     <style>
+    <style>
     .node rect {
       cursor: move;
       fill-opacity: .9;
@@ -88,7 +88,7 @@
     .link:hover {
       stroke-opacity: .5;
     }
-    </style>
+  </style>
   </head>
   <body>
     <div id="headbar">
