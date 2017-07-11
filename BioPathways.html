@@ -10,6 +10,23 @@
     padding: 0px;
     margin: 0px;
   }
+      .node rect {
+      cursor: move;
+      fill-opacity: .9;
+      shape-rendering: crispEdges;
+    }
+    .node text {
+      pointer-events: none;
+      text-shadow: 0 1px 0 #fff;
+    }
+    .link {
+      fill: none;
+      stroke: #000;
+      stroke-opacity: .2;
+    }
+    .link:hover {
+      stroke-opacity: .5;
+    }
   </style>
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
   <script src="js/d3.js"></script>
@@ -70,25 +87,6 @@
       	d3.json("cache/wp1011_sankey.json", render_sankey)
     }
     </script>
-    <style>
-    .node rect {
-      cursor: move;
-      fill-opacity: .9;
-      shape-rendering: crispEdges;
-    }
-    .node text {
-      pointer-events: none;
-      text-shadow: 0 1px 0 #fff;
-    }
-    .link {
-      fill: none;
-      stroke: #000;
-      stroke-opacity: .2;
-    }
-    .link:hover {
-      stroke-opacity: .5;
-    }
-  </style>
   </head>
   <body>
     <div id="headbar">
