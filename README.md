@@ -34,6 +34,7 @@ This will open a new chrome browser, you can open the BioPathways.html in the br
  - More functions  
  - Integration
  - 自然语言查询
+ - Open PHACTS 更新API以后做相应的迁移（20170711）
 
 ## Acknowledgement
 
